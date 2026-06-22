@@ -1,4 +1,4 @@
-
+ 
 
 const CONFIG = {
     updateInterval: 2000, 
