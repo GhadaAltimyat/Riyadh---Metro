@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام مترو الرياض الذكي - Smart Riyadh Metro System</title>
+   <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-subway"></i>
+                <span>مترو الرياض الذكي</span>
+            </div>
+            <button id="logout-btn" class="btn btn-danger" style="display:none;">تسجيل الخروج</button>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">الرئيسية</a></li>
+                <li><a href="#trains">مواعيد القطارات</a></li>
+                <li><a href="#crowd">كثافة الركاب</a></li>
+                <li><a href="#notifications">الإشعارات</a></li>
+                <li><a href="#payment">الدفع</a></li>
+                <li><a href="#login">تسجيل الدخول</a></li>
+            </ul>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>مرحباً بك في نظام مترو الرياض الذكي</h1>
+            <p>نظام إنترنت الأشياء (IoT) المتقدم لتحسين تجربة الركاب وكفاءة التشغيل</p>
+            <div class="hero-stats">
+                <div class="stat-box">
+                    <i class="fas fa-train"></i>
+                    <h3>6</h3>
+                    <p>خطوط المترو</p>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>85</h3>
+                    <p>محطة</p>
+                </div>
+                <div class="stat-box">
+                    <i class="fas fa-users"></i>
+                    <h3 id="live-users">1,247</h3>
+                    <p>مستخدم نشط</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-time Train Arrival Section -->
+    <section id="trains" class="section">
+        <div class="container">
+            <h2><i class="fas fa-clock"></i> مواعيد وصول القطارات (Real-time)</h2>
+            
+            <div class="station-selector">
+                <label for="station-select">اختر المحطة:</label>
+                <select id="station-select">
+                    <option value="olaya">محطة العليا</option>
+                    <option value="king-abdullah">محطة الملك عبدالله</option>
+                    <option value="qasr-alhukm">محطة قصر الحكم</option>
+                    <option value="airport">محطة المطار</option>
+                    <option value="diriyah">محطة الدرعية</option>
+                </select>
+            </div>
+
+            <div class="train-schedule">
+                <div class="schedule-header">
+                    <span>الخط</span>
+                    <span>الوجهة</span>
+                    <span>الوقت المتوقع</span>
+                    <span>الحالة</span>
+                </div>
+                <div id="train-list">
+                    <!-- Train items will be dynamically added here -->
+                </div>
+            </div>
+
+            <div class="refresh-info">
+                <i class="fas fa-sync-alt"></i>
+                <span>آخر تحديث: <span id="last-update">قبل ثانيتين</span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Crowd Density Section -->
+    <section id="crowd" class="section bg-light">
+        <div class="container">
+            <h2><i class="fas fa-users"></i> كثافة الركاب في المحطات</h2>
+            
+            <div class="crowd-filter">
+                <button class="filter-btn active" data-line="all">جميع الخطوط</button>
+                <button class="filter-btn" data-line="red">الخط الأحمر</button>
+                <button class="filter-btn" data-line="blue">الخط الأزرق</button>
+                <button class="filter-btn" data-line="green">الخط الأخضر</button>
+            </div>
+
+            <div class="crowd-grid" id="crowd-grid">
+                <!-- Crowd density cards will be added here -->
+            </div>
+
+            <div class="crowd-legend">
+                <h4>دليل الكثافة:</h4>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <span class="color-box low"></span>
+                        <span>منخفضة (0-30%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="color-box medium"></span>
+                        <span>متوسطة (31-70%)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="color-box high"></span>
+                        <span>عالية (71-100%)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notifications Section -->
+    <section id="notifications" class="section">
+        <div class="container">
+            <h2><i class="fas fa-bell"></i> الإشعارات والتحديثات</h2>
+            
+            <div class="notification-settings">
+                <label class="switch">
+                    <input type="checkbox" id="delay-alerts" checked>
+                    <span class="slider"></span>
+                </label>
+                <span>تفعيل إشعارات التأخير</span>
+            </div>
+
+            <div class="notifications-container" id="notifications-list">
+                <!-- Notifications will be added dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Methods Section -->
+    <section id="payment" class="section bg-light">
+        <div class="container">
+            <h2><i class="fas fa-credit-card"></i> طرق الدفع المتكاملة مع IoT</h2>
+            
+            <div class="payment-methods">
+                <div class="payment-card" data-method="nfc">
+                    <div class="payment-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>NFC الهاتف الذكي</h3>
+                    <p>الدفع السريع باستخدام Apple Pay أو Google Pay</p>
+                    <div class="popularity">63.6% من المستخدمين</div>
+                    <button class="btn-primary">اختيار</button>
+                </div>
+
+                <div class="payment-card" data-method="smartcard">
+                    <div class="payment-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <h3>البطاقة الذكية</h3>
+                    <p>بطاقة مترو الرياض القابلة لإعادة الشحن</p>
+                    <div class="popularity">23.6% من المستخدمين</div>
+                    <button class="btn-primary">اختيار</button>
+                </div>
+
+                <div class="payment-card" data-method="biometric">
+                    <div class="payment-icon">
+                        <i class="fas fa-fingerprint"></i>
+                    </div>
+                    <h3>الدفع البيومتري</h3>
+                    <p>التحقق عبر بصمة الإصبع أو التعرف على الوجه</p>
+                    <div class="popularity">9.1% من المستخدمين</div>
+                    <button class="btn-primary">اختيار</button>
+                </div>
+
+                <div class="payment-card" data-method="qr">
+                    <div class="payment-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <h3>رموز QR</h3>
+                    <p>مسح رمز QR للدفع السريع</p>
+                    <div class="popularity">3.6% من المستخدمين</div>
+                    <button class="btn-primary">اختيار</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- Login Section -->
+<section id="login" class="section">
+  <div class="container">
+    <div class="login-container">
+      <div class="login-box">
+        <h2>تسجيل الدخول</h2>
+
+        <form id="login-form" onsubmit="return false;">
+          <!-- اسم المستخدم -->
+          <div class="form-group">
+            <label for="username">اسم المستخدم</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              autocomplete="username"
+              placeholder="مثال: passenger1"
+            />
+          </div>
+
+          <!-- كلمة المرور -->
+          <div class="form-group">
+            <label for="password">كلمة المرور</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              autocomplete="current-password"
+              placeholder="pass123"
+            />
+          </div>
+
+          <!-- ✅ نوع المستخدم -->
+          <div class="form-group">
+            <label for="user-type">نوع المستخدم</label>
+            <select id="user-type" name="user-type" required>
+              <option value="">اختر نوع المستخدم</option>
+              <option value="passenger">راكب</option>
+              <option value="staff">موظف</option>
+              <option value="security">أمن</option>
+            </select>
+          </div>
+
+          <!-- تذكرني -->
+          <div class="form-group checkbox">
+            <input type="checkbox" id="remember" name="remember" />
+            <label for="remember">تذكرني</label>
+          </div>
+
+          <button type="submit" class="btn-primary btn-block">
+            تسجيل الدخول
+          </button>
+
+          <!-- معلومات تجريبية -->
+          <div
+            style="
+              margin-top: 15px;
+              padding: 10px;
+              background: #e3f2fd;
+              border-radius: 5px;
+              font-size: 0.9rem;
+            "
+          >
+            <strong>💡 للتجربة:</strong><br />
+            راكب: passenger1 / pass123<br />
+            موظف: staff1 / staff123<br />
+            أمن: security1 / security123
+          </div>
+        </form>
+
+        <div class="login-footer">
+          <p>
+            هل نسيت كلمة المرور؟
+            <a href="#" style="color: #1565c0">إعادة التعيين</a>
+          </p>
+          <p>
+            ليس لديك حساب؟
+            <a href="#" class="register-link" style="color: #1565c0"
+              >سجل الآن</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Registration Modal -->
+<div id="register-modal" class="modal" style="display:none;">
+  <div class="modal-content" style="background:#fff; padding:20px; border-radius:10px; max-width:400px; margin:100px auto;">
+    <h2>إنشاء حساب جديد</h2>
+    <form id="register-form">
+      <label for="new-username">اسم المستخدم:</label>
+      <input type="text" id="new-username" required><br>
+
+      <label for="new-password">كلمة المرور:</label>
+      <input type="password" id="new-password" required><br>
+
+      <label for="new-type">نوع الحساب:</label>
+      <select id="new-type" required>
+        <option value="">-- اختر النوع --</option>
+        <option value="passenger">راكب</option>
+        <option value="staff">موظف</option>
+        <option value="security">أمن</option>
+      </select><br>
+
+      <div id="verification-code-group" style="display:none; margin-top:10px;">
+        <label for="verification-code">رمز التحقق:</label>
+        <input type="text" id="verification-code" placeholder="أدخل رمز التحقق">
+      </div><br>
+
+      <button type="submit" class="btn-primary">تسجيل</button>
+      <button type="button" id="close-register" class="btn-secondary">إغلاق</button>
+    </form>
+  </div>
+</div>
+
+<a href="#" class="forgot-password">هل نسيت كلمة المرور؟</a>
+<p>ليس لديك حساب؟ <a href="#" class="register-link">سجل الآن</a></p>
+
+                <!-- Staff Login -->
+                <div class="staff-login">
+                    <h3>دخول الموظفين</h3>
+                    <p>للموظفين والفنيين فقط</p>
+                    <button class="btn-secondary" id="staff-login-btn">دخول الموظفين</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IoT Sensors Dashboard (For Staff) -->
+    <section id="iot-dashboard" class="section bg-light" style="display: none;">
+        <div class="container">
+            <h2><i class="fas fa-chart-line"></i> لوحة التحكم بأجهزة الاستشعار IoT</h2>
+            
+            <div class="sensor-grid">
+                <div class="sensor-card">
+                    <h4>بيانات تدفق الركاب</h4>
+                    <div class="sensor-value">1,247</div>
+                    <p>راكب نشط حالياً</p>
+                    <div class="sensor-status online">متصل</div>
+                </div>
+
+                <div class="sensor-card">
+                    <h4>البيانات البيئية</h4>
+                    <div class="sensor-value">24°C</div>
+                    <p>درجة الحرارة / 45% رطوبة</p>
+                    <div class="sensor-status online">متصل</div>
+                </div>
+
+                <div class="sensor-card">
+                    <h4>استخدام المعدات</h4>
+                    <div class="sensor-value">98%</div>
+                    <p>السلالم المتحركة تعمل</p>
+                    <div class="sensor-status online">متصل</div>
+                </div>
+
+                <div class="sensor-card">
+                    <h4>الموقع العام</h4>
+                    <div class="sensor-value">12</div>
+                    <p>محطة نشطة</p>
+                    <div class="sensor-status online">متصل</div>
+                </div>
+            </div>
+
+            <div class="maintenance-alerts">
+                <h3><i class="fas fa-wrench"></i> تنبيهات الصيانة التنبؤية</h3>
+                <div id="maintenance-list">
+                    <!-- Maintenance alerts will be added here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Monitoring (For Security Staff) -->
+    <section id="security-dashboard" class="section" style="display: none;">
+        <div class="container">
+            <h2><i class="fas fa-shield-alt"></i> مراقبة الأمن IoT</h2>
+            
+            <div class="security-grid">
+                <div class="camera-feed">
+                    <h4>كاميرا المحطة 1</h4>
+                    <div class="camera-placeholder">
+                        <i class="fas fa-video"></i>
+                        <p>البث المباشر</p>
+                    </div>
+                    <div class="camera-status normal">طبيعي</div>
+                </div>
+
+                <div class="camera-feed">
+                    <h4>كاميرا المحطة 2</h4>
+                    <div class="camera-placeholder">
+                        <i class="fas fa-video"></i>
+                        <p>البث المباشر</p>
+                    </div>
+                    <div class="camera-status normal">طبيعي</div>
+                </div>
+            </div>
+
+            <div class="emergency-alerts">
+                <h3><i class="fas fa-exclamation-triangle"></i> تنبيهات الطوارئ</h3>
+                <div id="security-alerts">
+                    <p class="no-alerts">لا توجد تنبيهات حالياً</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>نظام مترو الرياض الذكي</h3>
+                    <p>نظام متقدم يعتمد على إنترنت الأشياء (IoT) لتحسين تجربة الركاب وكفاءة التشغيل</p>
+                </div>
+                <div class="footer-section">
+                    <h4>روابط سريعة</h4>
+                    <ul>
+                        <li><a href="#trains">مواعيد القطارات</a></li>
+                        <li><a href="#crowd">كثافة الركاب</a></li>
+                        <li><a href="#payment">طرق الدفع</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>اتصل بنا</h4>
+                    <p><i class="fas fa-phone"></i> 920000000</p>
+                    <p><i class="fas fa-envelope"></i> info@riyadhmetro.sa</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 نظام مترو الرياض الذكي - جميع الحقوق محفوظة</p>
+                <p>تم التطوير بواسطة: Eng.Ghada Altemyat,Eng.Joud Alshahrani,Eng.Jadel Alsaeri , Eng.Albandri Alsaadoon
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script (1).js"></script>
+</body>
+</html>
